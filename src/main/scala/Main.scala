@@ -1,7 +1,4 @@
-import utils.DatabaseException
-import utils.HttpException
-import utils.ReadException
-import utils.WriteException
+import utils._
 
 object Main {
   import utils.Implicit._

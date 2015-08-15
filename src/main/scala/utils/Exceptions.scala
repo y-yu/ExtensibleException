@@ -1,14 +1,21 @@
 package utils
 
 trait RootException extends Throwable
+trait ExceptionsImplicit {
+  implicit def self[A, B >: A] = new ~>[A, B] {
+    def cast(a: A): B = a
+  }
+}
 
 case class DatabaseException(m: String) extends RootException
+object DatabaseException extends ExceptionsImplicit
 
 case class HttpException(m: String) extends RootException
+object HttpException extends ExceptionsImplicit
 
 case class DatabaseAndHttpException(m: String) extends RootException
 
-object DatabaseAndHttpException extends {
+object DatabaseAndHttpException extends ExceptionsImplicit {
   implicit val databaseException = new ~>[DatabaseException, DatabaseAndHttpException] {
     def cast(a: DatabaseException): DatabaseAndHttpException =
       DatabaseAndHttpException(s"database: ${a.m}")
@@ -21,17 +28,16 @@ object DatabaseAndHttpException extends {
 }
 
 trait FileException extends RootException
-object FileException {
-  implicit val readToSuper = new ~>[ReadException, FileException] {
-    def cast(a: ReadException): FileException = a
-  }
-
-  implicit val writeToSuper = new ~>[WriteException, FileException] {
-    def cast(a: WriteException): FileException = a
+object FileException extends ExceptionsImplicit {
+  implicit def superclass[A <: FileException] = new ~>[A, FileException] {
+    def cast(a: A): FileException = a
   }
 }
 
 case class ReadException(m: String) extends FileException
+object ReadException extends FileException
+
 
 case class WriteException(m: String) extends FileException
+object WriteException extends FileException
 

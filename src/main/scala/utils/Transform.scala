@@ -5,7 +5,7 @@ trait ~>[A, B] {
 }
 
 object ~> {
-  implicit def self[A]: A ~> A = new ~>[A, A] {
+  implicit def self[A] = new ~>[A, A] {
     def cast(a: A): A = a
   }
 }

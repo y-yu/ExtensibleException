@@ -1,3 +1,6 @@
+import java.io.File
+import javax.annotation.processing.FilerException
+
 import utils._
 
 object Main {
@@ -33,5 +36,11 @@ object Main {
     val e8 = for {
       a <- e5
     } yield ()
+
+    // pattern match
+    e7.left.map {
+      case ReadException(m)  => println(s"Read Exception: $m")
+      case WriteException(m) => println(s"Write Exception: $m")
+    }
   }
 }

@@ -14,23 +14,24 @@ object Main {
       a <- e1
     } yield ()
 
-    import utils.DatabaseAndHttpException._
-
     // this is DatabaseAndHttpException
     val e4 = for {
       a <- e1
-      b <- e2
+      b <- e2.as[DatabaseAndHttpException]
     } yield ()
 
     val e5 = left(ReadException("file read error"))
     val e6 = left(WriteException("file read error"))
 
-    import utils.FileException._
-
     // this is FileException
     val e7 = for {
       a <- e5
-      b <- e6
+      b <- e6.as[FileException]
+    } yield ()
+
+    // this is ReadException
+    val e8 = for {
+      a <- e5
     } yield ()
   }
 }

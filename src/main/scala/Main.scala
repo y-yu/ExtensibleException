@@ -8,7 +8,6 @@ object Main {
   def main(args: Array[String]): Unit = {
     val e1 = left(DatabaseException("db error"))
     val e2 = left(HttpException("http error"))
-
     // this is DatabaseException
     val e3 = for {
       a <- e1

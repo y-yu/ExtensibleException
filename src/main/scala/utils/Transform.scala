@@ -1,6 +1,6 @@
 package utils
 
-trait :->[A, B] {
+trait :->[-A, +B] {
   def cast(a: A): B
 }
 
@@ -9,3 +9,4 @@ object :-> {
     def cast(a: A): B = a
   }
 }
+

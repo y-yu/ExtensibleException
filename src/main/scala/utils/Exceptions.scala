@@ -24,3 +24,11 @@ trait FileException extends RootException
 case class ReadException(m: String) extends FileException
 
 case class WriteException(m: String) extends FileException
+
+// defined by macro
+case class FileAndHttpException(cause: Throwable) extends RootException
+object FileAndHttpException {
+  implicit val fileException = Transform.castable[FileException, FileAndHttpException]
+  implicit val httpException = Transform.castable[HttpException, FileAndHttpException]
+}
+

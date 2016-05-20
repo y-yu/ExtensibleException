@@ -1,6 +1,7 @@
-import utils._
+import utils.:->
 
 object Main {
+  import exceptions._
   import utils.Implicit._
 
   def left[A](e: A) = Left[A, Unit](e)
@@ -20,7 +21,7 @@ object Main {
     } yield ()
 
     val e5 = left(ReadException("file read error"))
-    val e6 = left(WriteException("file read error"))
+    val e6 = left(WriteException("file write error"))
 
     // this is FileException
     val e7 = for {
@@ -38,5 +39,12 @@ object Main {
       case ReadException(m)  => println(s"Read Exception: $m")
       case WriteException(m) => println(s"Write Exception: $m")
     }
+
+    // chain
+    val e9 = for {
+      a <- e1
+      b <- e2
+      c <- e5.as[DatabaseAndHttpAndFileReadException]
+    } yield ()
   }
 }

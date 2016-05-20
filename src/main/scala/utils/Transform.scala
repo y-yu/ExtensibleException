@@ -1,7 +1,10 @@
 package utils
 
-trait :->[-A, +B] {
+trait :->[-A, +B] { self =>
   def cast(a: A): B
+  def compose[C](that: B :-> C) = new :->[A, C] {
+    def cast(a: A): C = that.cast(self.cast(a))
+  }
 }
 
 object :-> {
@@ -14,3 +17,7 @@ object :-> {
   }
 }
 
+object Transform {
+  def trans[A, B, C](implicit F: A :-> B, G: B :-> C): A :-> C =
+    implicitly[A :-> B] compose implicitly[B :-> C]
+}

@@ -1,50 +1,54 @@
-import utils.:->
-
 object Main {
   import exceptions._
   import utils.Implicit._
 
   def left[A](e: A) = Left[A, Unit](e)
 
+  def e1 = left(DatabaseException("db error"))
+
+  def e2 = left(HttpException("http error"))
+
+  def e3 = left(ReadException("file read error"))
+
+  def e4 = left(WriteException("file write error"))
+
   def main(args: Array[String]): Unit = {
-    val e1 = left(DatabaseException("db error"))
-    val e2 = left(HttpException("http error"))
     // this is DatabaseException
-    val e3 = for {
+    val e5 = for {
       a <- e1
     } yield ()
 
     // this is DatabaseAndHttpException
-    val e4 = for {
-      a <- e1
-      b <- e2.as[DatabaseAndHttpException]
-    } yield ()
-
-    val e5 = left(ReadException("file read error"))
-    val e6 = left(WriteException("file write error"))
+    {
+      import DatabaseAndHttpException._
+      val e6 = for {
+        a <- e1
+        b <- e2.as[DatabaseAndHttpException]
+      } yield ()
+    }
 
     // this is FileException
     val e7 = for {
-      a <- e5
-      b <- e6.as[FileException]
+      a <- e3
+      b <- e4.as[FileException]
     } yield ()
 
     // this is ReadException
     val e8 = for {
-      a <- e5
+      a <- e3
     } yield ()
 
-    // pattern match
-    e7.left.map {
-      case ReadException(m)  => println(s"Read Exception: $m")
-      case WriteException(m) => println(s"Write Exception: $m")
+    // chain of :->
+    {
+      import DatabaseAndHttpException._
+      import DatabaseAndHttpAndFileReadException._
+      import DatabaseAndHttpAndFileException._
+      val e9 = for {
+        a <- e1
+        b <- e2
+        c <- e3
+        d <- e4.as[DatabaseAndHttpAndFileException]
+      } yield ()
     }
-
-    // chain
-    val e9 = for {
-      a <- e1
-      b <- e2
-      c <- e5.as[DatabaseAndHttpAndFileReadException]
-    } yield ()
   }
 }

@@ -29,6 +29,7 @@ case class ReadException(m: String) extends FileException
 case class WriteException(m: String) extends FileException
 
 case class DatabaseAndHttpAndFileReadException(m: String) extends RootException
+
 object DatabaseAndHttpAndFileReadException {
   implicit val databaseAndHttpException = new (DatabaseAndHttpException :-> DatabaseAndHttpAndFileReadException) {
     def apply(a: DatabaseAndHttpException): DatabaseAndHttpAndFileReadException =
@@ -42,6 +43,7 @@ object DatabaseAndHttpAndFileReadException {
 }
 
 case class DatabaseAndHttpAndFileException(m: String) extends RootException
+
 object DatabaseAndHttpAndFileException {
   implicit val databaseAndHttpAndFileReadExcepion = new (DatabaseAndHttpAndFileReadException :-> DatabaseAndHttpAndFileException) {
     def apply(a: DatabaseAndHttpAndFileReadException): DatabaseAndHttpAndFileException =

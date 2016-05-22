@@ -1,3 +1,3 @@
 # ExtensibleException
 
-http://qiita.com/yyu/items/07d56112bc42938aee05
+http://qiita.com/yyu/items/2f1a3b0fdea6251d7f64

@@ -38,12 +38,23 @@ object Main {
       a <- e3
     } yield ()
 
-    // chain of :->
+    // 3 chain of :->
+    {
+      import DatabaseAndHttpException._
+      import DatabaseAndHttpAndFileReadException._
+      val e9 = for {
+        a <- e1
+        b <- e2
+        c <- e3.as[DatabaseAndHttpAndFileReadException]
+      } yield ()
+    }
+
+    // 4 chain of :->
     {
       import DatabaseAndHttpException._
       import DatabaseAndHttpAndFileReadException._
       import DatabaseAndHttpAndFileException._
-      val e9 = for {
+      val e10 = for {
         a <- e1
         b <- e2
         c <- e3

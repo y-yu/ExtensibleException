@@ -7,7 +7,7 @@ object Implicit {
       case Right(v) => Right(f(v))
     }
 
-    def flatMap[L2 <: Throwable, R2 >: R1](f: R1 => Either[L2, R2])(implicit F: L1 :~> L2): Either[L2, R2] = ee match {
+    def flatMap[L2 <: Throwable, R2](f: R1 => Either[L2, R2])(implicit F: L1 :~> L2): Either[L2, R2] = ee match {
       case Left(e)  => Left(F(e))
       case Right(v) => f(v)
     }
